@@ -1,0 +1,1 @@
+export default function Modal({ open, title, children, onClose }) { if (!open) return null; return <div className="ui-modal-backdrop" role="presentation"><div className="ui-modal" role="dialog" aria-modal="true" aria-label={title}><button className="ui-modal-close" type="button" onClick={onClose}>×</button><h2>{title}</h2>{children}</div></div>; }

@@ -161,7 +161,7 @@ form.addEventListener('submit', (event) => {
   document.querySelector('#results-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
-document.querySelector('#view-all').addEventListener('click', () => showToast(language === 'bn' ? 'আপনি সব তুলনা দেখছেন' : 'You are viewing all available comparisons'));
+document.querySelector('#view-all').addEventListener('click', () => { window.location.href = 'react.html#/compare'; });
 document.querySelector('.notification-button').addEventListener('click', () => showToast(language === 'bn' ? 'নতুন কোনো alert নেই। আপনার চালান ঠিক আছে।' : 'No new alerts. Your shipments are on track.'));
 document.querySelectorAll('.language-button').forEach((button) => button.addEventListener('click', () => setDashboardLanguage(button.dataset.language)));
 setDashboardLanguage(language);

@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="platform.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3VfK0f8Q0M+X4xN5lQw1o5h5fXw7A=" crossorigin="" />
 </head>
 <body>
   <div class="app-shell">
@@ -20,16 +22,17 @@
 
       <nav class="nav-group" aria-label="Workspace">
         <p class="nav-label">Workspace</p>
-        <a class="nav-item is-active" href="#compare"><span class="nav-icon">↗</span>Compare rates</a>
-        <a class="nav-item" href="#shipments"><span class="nav-icon">▤</span>Shipments <span class="nav-count">12</span></a>
-        <a class="nav-item" href="#analytics"><span class="nav-icon">⌁</span>Analytics</a>
-        <a class="nav-item" href="#carriers"><span class="nav-icon">◌</span>Carriers</a>
+        <a class="nav-item is-active" href="react.html#/compare"><span class="nav-icon">↗</span>Compare rates</a>
+        <a class="nav-item" href="react.html#/booking"><span class="nav-icon">＋</span>Book pickup</a>
+        <a class="nav-item" href="react.html#/tracking"><span class="nav-icon">⌁</span>Track shipment</a>
+        <a class="nav-item" href="react.html#/tracking"><span class="nav-icon">▤</span>Shipments <span class="nav-count">12</span></a>
+        <a class="nav-item" href="react.html#/"><span class="nav-icon">◌</span>Analytics</a>
       </nav>
 
       <nav class="nav-group nav-group-bottom" aria-label="Account">
         <p class="nav-label">Account</p>
         <a class="nav-item" href="auth.html#register"><span class="nav-icon">⚙</span>Account</a>
-        <a class="nav-item" href="#help"><span class="nav-icon">?</span>Help center</a>
+        <a class="nav-item" href="mailto:support@logicompare.bd"><span class="nav-icon">?</span>Help center</a>
       </nav>
 
       <div class="sidebar-footer">
@@ -139,10 +142,42 @@
         <article class="insight-card route-insight"><div><p>Most active lane</p><strong>West → Midwest</strong><small>26 shipments this month</small></div><span class="route-art" aria-hidden="true">⟶</span></article>
       </section>
 
+      <section class="platform-grid" id="booking">
+        <article class="workflow-panel booking-panel">
+          <div class="panel-heading"><div><p class="eyebrow">Shipment booking</p><h2>Book a pickup</h2></div><span class="panel-status">MVP</span></div>
+          <form id="booking-form" class="booking-form">
+            <div class="booking-fields"><label>Pickup date<input id="pickup-date" type="date" required /></label><label>Pickup window<select id="pickup-window"><option>09:00 - 12:00</option><option>12:00 - 15:00</option><option>15:00 - 18:00</option></select></label><label>Parcel type<select id="parcel-type"><option>Document</option><option>Parcel</option><option>Fragile</option><option>Electronics</option></select></label><label>COD amount<input id="cod-amount" type="number" min="0" placeholder="0 BDT" /></label></div>
+            <div class="booking-summary"><span><strong id="booking-route">Dhaka → Chattogram</strong><small>Pickup and delivery addresses from your quote</small></span><button class="primary-button" type="submit"><span>Generate booking</span><span>↗</span></button></div>
+          </form>
+        </article>
+        <article class="workflow-panel payment-panel" id="payments"><div class="panel-heading"><div><p class="eyebrow">Payment</p><h2>Choose how to pay</h2></div><span class="payment-badge">Secure</span></div><div class="payment-options"><button class="payment-option is-selected" type="button" data-payment="bKash"><span class="payment-logo bkash">bK</span><span><strong>bKash</strong><small>Mobile financial service</small></span><i>✓</i></button><button class="payment-option" type="button" data-payment="Nagad"><span class="payment-logo nagad">N</span><span><strong>Nagad</strong><small>Mobile financial service</small></span><i>✓</i></button><button class="payment-option" type="button" data-payment="Card"><span class="payment-logo card">▣</span><span><strong>Debit / Credit card</strong><small>Visa, Mastercard</small></span><i>✓</i></button><button class="payment-option" type="button" data-payment="COD"><span class="payment-logo cash">৳</span><span><strong>Cash on delivery</strong><small>Pay when delivered</small></span><i>✓</i></button></div><div class="payment-actions"><p class="secure-note">▣ Payment status will update after gateway confirmation.</p><button class="pay-button" id="pay-button" type="button">Confirm payment <span>→</span></button></div></article>
+      </section>
+
+      <section class="tracking-workspace" id="tracking">
+        <div class="tracking-heading"><div><p class="eyebrow">Shipment tracking</p><h2>Follow every handoff</h2></div><form id="tracking-form"><input id="tracking-id" value="LC-BD-2408147" aria-label="Tracking ID" /><button type="submit">Track <span>→</span></button></form></div>
+        <div class="tracking-content"><div class="tracking-current"><span class="tracking-icon">↗</span><div><small>Current status</small><strong id="tracking-status">In transit</strong><span id="tracking-route">Dhaka hub → Chattogram hub</span></div><span class="tracking-eta">ETA <strong id="tracking-eta">15 Aug</strong></span></div><div class="live-map-panel"><div id="live-map" aria-label="Live parcel location map"></div><div class="map-overlay"><span class="live-dot"></span><strong id="map-live-label">Live location</strong><small id="map-updated">Updated just now</small></div><button class="map-center-button" id="map-center" type="button" aria-label="Center map on parcel">◎</button></div><div class="timeline" id="tracking-timeline"><div class="timeline-step is-done"><i>✓</i><span><strong>Booking created</strong><small>14 Aug, 08:40</small></span></div><div class="timeline-step is-done"><i>✓</i><span><strong>Pickup confirmed</strong><small>14 Aug, 10:15</small></span></div><div class="timeline-step is-active"><i>●</i><span><strong>In transit</strong><small>14 Aug, 15:20</small></span></div><div class="timeline-step"><i></i><span><strong>Out for delivery</strong><small>Expected 15 Aug</small></span></div><div class="timeline-step"><i></i><span><strong>Delivered</strong><small>Pending</small></span></div></div></div>
+      </section>
+
+      <section class="review-panel workflow-panel" id="reviews"><div class="panel-heading"><div><p class="eyebrow">Courier review</p><h2>Rate a delivered shipment</h2></div><span class="panel-status">After delivery</span></div><form id="review-form" class="review-form"><label>Shipment<select><option>LC-BD-2408062 · Sundarban</option><option>LC-BD-2407298 · Pathao</option></select></label><div class="rating-choice" role="group" aria-label="Rating"><button type="button" data-rating="1">★</button><button type="button" data-rating="2">★</button><button type="button" data-rating="3">★</button><button type="button" data-rating="4">★</button><button type="button" data-rating="5">★</button></div><label class="review-message">Your feedback<textarea placeholder="How was the delivery experience?" rows="2"></textarea></label><button class="outline-button light-button" type="submit">Submit review <span>↗</span></button></form></section>
+
+      <section class="operations-grid" id="operations">
+        <article class="workflow-panel history-panel" id="shipments-history"><div class="panel-heading"><div><p class="eyebrow">Shipment history</p><h2>Your recent shipments</h2></div><button class="text-button" id="export-history" type="button">Export CSV <span>↓</span></button></div><div class="history-list" id="history-list"><div class="history-item"><span class="history-code">LC</span><div><strong>LC-BD-2408147</strong><small>Dhaka → Chattogram · Parcel</small></div><span class="history-status status-transit">In transit</span><b>৳৩২০</b></div><div class="history-item"><span class="history-code green">LC</span><div><strong>LC-BD-2408062</strong><small>Dhaka → Sylhet · Document</small></div><span class="history-status status-delivered">Delivered</span><b>৳১৮০</b></div><div class="history-item"><span class="history-code amber">LC</span><div><strong>LC-BD-2407298</strong><small>Khulna → Dhaka · Parcel</small></div><span class="history-status status-delivered">Delivered</span><b>৳২৭০</b></div></div></article>
+        <article class="workflow-panel notification-panel"><div class="panel-heading"><div><p class="eyebrow">Notifications</p><h2>Stay up to date</h2></div><span class="unread-count">3 new</span></div><div class="notification-list"><button type="button"><i class="notification-symbol coral">✓</i><span><strong>Pickup confirmed</strong><small>LC-BD-2408147 was picked up by RedX.</small></span><time>12m</time></button><button type="button"><i class="notification-symbol teal">৳</i><span><strong>Payment received</strong><small>Your bKash payment of ৳৩২০ is confirmed.</small></span><time>1h</time></button><button type="button"><i class="notification-symbol navy">!</i><span><strong>Rate update</strong><small>Prices on your Dhaka → Sylhet lane changed.</small></span><time>3h</time></button></div></article>
+      </section>
+
+      <section class="role-panel" id="carriers">
+        <div class="role-heading"><div><p class="eyebrow">Operations workspace</p><h2>One platform, every role</h2><p>Switch between role views to test the operational workflows.</p></div><div class="role-tabs" role="tablist"><button class="role-tab is-active" type="button" data-role="customer">Customer</button><button class="role-tab" type="button" data-role="courier">Courier partner</button><button class="role-tab" type="button" data-role="admin">Admin</button></div></div>
+        <div class="role-view is-visible" data-role-view="customer"><div class="role-stat"><span>Active bookings</span><strong>01</strong><small>Pickup confirmed</small></div><div class="role-stat"><span>Wallet balance</span><strong>৳২,৮৪০</strong><small>Available credit</small></div><div class="role-stat"><span>Saved addresses</span><strong>04</strong><small>Home, office, warehouse</small></div><button class="outline-button" type="button" data-action="profile">Edit profile <span>→</span></button></div>
+        <div class="role-view" data-role-view="courier"><div class="role-stat"><span>New requests</span><strong>18</strong><small>Across 4 service areas</small></div><div class="role-stat"><span>Today's pickups</span><strong>32</strong><small>7 awaiting acceptance</small></div><div class="role-stat"><span>On-time rate</span><strong>96.8%</strong><small>Last 30 days</small></div><button class="outline-button" type="button" data-action="accept">View pickup queue <span>→</span></button></div>
+        <div class="role-view" data-role-view="admin"><div class="role-stat"><span>Total shipments</span><strong>1,284</strong><small>+18.2% this month</small></div><div class="role-stat"><span>Active partners</span><strong>12</strong><small>2 pending review</small></div><div class="role-stat"><span>Pending disputes</span><strong>03</strong><small>Needs attention</small></div><button class="outline-button" type="button" data-action="reports">Open admin reports <span>→</span></button></div>
+      </section>
+
       <footer class="footer"><span>© 2024 LogiCompare</span><span><a href="#privacy">Privacy</a><a href="#terms">Terms</a><span class="status"><i></i>All systems operational</span></span></footer>
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="app.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="platform.js"></script>
 </body>
 </html>

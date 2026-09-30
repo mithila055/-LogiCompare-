@@ -6,6 +6,7 @@ const nameFields = document.querySelector('.auth-name-fields');
 const toast = document.querySelector('#toast');
 let authMode = 'login';
 let language = localStorage.getItem('logicompare-language') || 'bn';
+let accounts = JSON.parse(localStorage.getItem('logicompare-accounts') || '[]');
 
 const translations = {
   bn: {
@@ -66,7 +67,12 @@ function setLanguage(nextLanguage) {
 
 document.querySelectorAll('.auth-tab').forEach((tab) => tab.addEventListener('click', () => setMode(tab.dataset.mode)));
 document.querySelectorAll('.language-button').forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.language)));
-document.querySelectorAll('.social-button').forEach((button) => button.addEventListener('click', () => showToast(`${button.dataset.provider} sign-in will open here`)));
+document.querySelectorAll('.social-button').forEach((button) => button.addEventListener('click', () => {
+  const provider = button.dataset.provider;
+  localStorage.setItem('logicompare-user', JSON.stringify({ id: `${provider.toLowerCase()}-customer`, name: `${provider} customer`, role: 'customer', provider }));
+  showToast(language === 'bn' ? `${provider} দিয়ে লগইন সফল হয়েছে` : `${provider} sign-in successful`);
+  window.setTimeout(() => { window.location.href = 'react.html#/'; }, 700);
+}));
 
 document.querySelector('.password-toggle').addEventListener('click', (event) => {
   const password = document.querySelector('#password');
@@ -78,13 +84,42 @@ document.querySelector('.password-toggle').addEventListener('click', (event) => 
 authForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const phone = document.querySelector('#phone').value.trim();
+  const password = document.querySelector('#password').value;
+  const fullName = document.querySelector('#full-name').value.trim();
   if (!/^01\d{9}$/.test(phone)) {
     showToast(language === 'bn' ? 'সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন' : 'Enter a valid 11-digit Bangladesh mobile number');
     document.querySelector('#phone').focus();
     return;
   }
-  showToast(authMode === 'register' ? (language === 'bn' ? 'আপনার অ্যাকাউন্ট তৈরি হয়েছে' : 'Your account has been created') : (language === 'bn' ? 'লগইন সফল হয়েছে' : 'Signed in successfully'));
-  window.setTimeout(() => { window.location.href = 'index.html'; }, 900);
+  if (password.length < 6) {
+    showToast(language === 'bn' ? 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে' : 'Password must be at least 6 characters');
+    return;
+  }
+  if (authMode === 'register') {
+    if (!fullName) {
+      showToast(language === 'bn' ? 'আপনার নাম লিখুন' : 'Enter your full name');
+      return;
+    }
+    if (accounts.some((account) => account.phone === phone)) {
+      showToast(language === 'bn' ? 'এই নম্বরে আগে থেকেই অ্যাকাউন্ট আছে' : 'An account already exists for this number');
+      setMode('login');
+      return;
+    }
+    const account = { id: `customer-${Date.now()}`, name: fullName, phone, password, role: 'customer' };
+    accounts = [...accounts, account];
+    localStorage.setItem('logicompare-accounts', JSON.stringify(accounts));
+    localStorage.setItem('logicompare-user', JSON.stringify({ id: account.id, name: account.name, role: account.role }));
+    showToast(language === 'bn' ? 'আপনার অ্যাকাউন্ট তৈরি হয়েছে' : 'Your account has been created');
+  } else {
+    const account = accounts.find((item) => item.phone === phone && item.password === password);
+    if (!account) {
+      showToast(language === 'bn' ? 'মোবাইল নম্বর বা পাসওয়ার্ড সঠিক নয়' : 'Incorrect phone number or password');
+      return;
+    }
+    localStorage.setItem('logicompare-user', JSON.stringify({ id: account.id, name: account.name, role: account.role }));
+    showToast(language === 'bn' ? 'লগইন সফল হয়েছে' : 'Signed in successfully');
+  }
+  window.setTimeout(() => { window.location.href = 'react.html#/'; }, 900);
 });
 
 setLanguage(language);

@@ -1,0 +1,3 @@
+import DataGrid from '../../components/admin/DataGrid';
+const rows = [{ id: 'LC-BD-2408147', trackingId: 'LC-BD-2408147', route: 'Dhaka → Chattogram', status: 'In transit', payment: 'Paid' }, { id: 'LC-BD-2408062', trackingId: 'LC-BD-2408062', route: 'Dhaka → Sylhet', status: 'Delivered', payment: 'Paid' }];
+export default function Shipments() { return <div className="app-page"><div className="page-heading"><div><p className="eyebrow">Admin / shipments</p><h1>Shipment monitoring</h1></div></div><DataGrid columns={[{ key: 'trackingId', label: 'Tracking ID' }, { key: 'route', label: 'Route' }, { key: 'status', label: 'Status' }, { key: 'payment', label: 'Payment' }]} rows={rows} /></div>; }

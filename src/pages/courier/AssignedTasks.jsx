@@ -1,0 +1,4 @@
+import { useState } from 'react';
+import TaskCard from '../../components/courier/TaskCard';
+const initialTasks = [{ trackingId: 'LC-BD-2408147', route: 'Dhaka → Chattogram', parcelType: 'Parcel', weight: 2, window: '09:00 - 12:00' }, { trackingId: 'LC-BD-2408151', route: 'Dhaka → Sylhet', parcelType: 'Document', weight: 1, window: '12:00 - 15:00' }];
+export default function AssignedTasks() { const [tasks, setTasks] = useState(initialTasks); return <div className="app-page"><div className="page-heading"><div><p className="eyebrow">Courier partner</p><h1>Assigned pickup tasks</h1><p>Accept pickup requests and keep customers updated.</p></div></div><div className="task-list">{tasks.map((task) => <TaskCard key={task.trackingId} task={task} onAccept={(accepted) => setTasks(tasks.filter((item) => item.trackingId !== accepted.trackingId))} />)}</div></div>; }

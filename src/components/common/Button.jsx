@@ -1,0 +1,1 @@
+export default function Button({ children, variant = 'primary', type = 'button', onClick, disabled = false }) { return <button className={`ui-button ui-button-${variant}`} type={type} onClick={onClick} disabled={disabled}>{children}</button>; }

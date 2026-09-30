@@ -1,0 +1,3 @@
+import { formatPrice } from '../../utils/formatPrice';
+
+export default function CourierCard({ courier, onSelect }) { return <article className="courier-card"><div className="courier-card-top"><span className="courier-logo">{courier.name.slice(0, 1)}</span><span className="courier-match">{courier.match}% match</span></div><h3>{courier.name}</h3><p>{courier.service}</p><div className="courier-card-meta"><strong>{formatPrice(courier.price)}</strong><span>{courier.eta}</span></div><button className="ui-button ui-button-primary" type="button" onClick={() => onSelect(courier)}>Book this rate ↗</button></article>; }
