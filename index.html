@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LogiCompare Bangladesh delivery rate intelligence dashboard" />
+  <title>LogiCompare Bangladesh | Delivery rate intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="LogiCompare home">
+        <span class="brand-mark">LC</span>
+        <span>LogiCompare</span>
+      </a>
+
+      <nav class="nav-group" aria-label="Workspace">
+        <p class="nav-label">Workspace</p>
+        <a class="nav-item is-active" href="#compare"><span class="nav-icon">↗</span>Compare rates</a>
+        <a class="nav-item" href="#shipments"><span class="nav-icon">▤</span>Shipments <span class="nav-count">12</span></a>
+        <a class="nav-item" href="#analytics"><span class="nav-icon">⌁</span>Analytics</a>
+        <a class="nav-item" href="#carriers"><span class="nav-icon">◌</span>Carriers</a>
+      </nav>
+
+      <nav class="nav-group nav-group-bottom" aria-label="Account">
+        <p class="nav-label">Account</p>
+        <a class="nav-item" href="auth.html#register"><span class="nav-icon">⚙</span>Account</a>
+        <a class="nav-item" href="#help"><span class="nav-icon">?</span>Help center</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="profile-avatar">JM</div>
+        <div>
+          <strong>Jordan Miller</strong>
+          <span>Operations lead</span>
+        </div>
+        <button class="icon-button subtle" type="button" aria-label="Open profile menu">•••</button>
+      </div>
+    </aside>
+
+    <main class="main-content" id="top">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">বুধবার, ১৪ আগস্ট ২০২৪</p>
+          <h1>Good morning, Rafi <span aria-hidden="true">✦</span></h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="language-switch" role="group" aria-label="Language"><button class="language-button" type="button" data-language="bn">বাংলা</button><button class="language-button" type="button" data-language="en">English</button></div>
+          <button class="icon-button notification-button" type="button" aria-label="Show notifications"><span class="notification-dot"></span>♢</button>
+          <a class="avatar-button" href="auth.html#login" aria-label="Open profile">RM</a>
+        </div>
+      </header>
+
+      <section class="hero-panel" id="compare" aria-labelledby="compare-title">
+        <div class="hero-copy">
+          <p class="eyebrow accent-eyebrow">Bangladesh delivery intelligence</p>
+          <h2 id="compare-title">Deliver smarter.<br /><em>Save more.</em></h2>
+          <p>ঢাকা থেকে দেশের যেকোনো প্রান্তে পাঠানোর আগে এক জায়গায় কুরিয়ার ও ট্রাকিং রেট তুলনা করুন।</p>
+        </div>
+        <div class="hero-orbit" aria-hidden="true">
+          <div class="orbit-line orbit-line-one"></div>
+          <div class="orbit-line orbit-line-two"></div>
+          <div class="orbit-core"><span>LC</span><small>LIVE</small></div>
+          <span class="orbit-node node-one">$</span><span class="orbit-node node-two">↗</span><span class="orbit-node node-three">✓</span>
+        </div>
+      </section>
+
+      <section class="search-card" aria-label="Compare a shipment">
+        <form id="rate-form">
+          <div class="form-field route-field">
+            <label for="origin">পাঠাবেন যেখান থেকে</label>
+            <div class="input-wrap"><span class="field-icon">⌖</span><input id="origin" name="origin" value="ঢাকা, বাংলাদেশ" autocomplete="off" /></div>
+          </div>
+          <div class="route-arrow" aria-hidden="true">→</div>
+          <div class="form-field route-field">
+            <label for="destination">পাঠাবেন যেখানে</label>
+            <div class="input-wrap"><span class="field-icon">⌖</span><input id="destination" name="destination" value="চট্টগ্রাম, বাংলাদেশ" autocomplete="off" /></div>
+          </div>
+          <div class="form-field compact-field">
+            <label for="weight">ওজন</label>
+            <div class="input-wrap"><span class="field-icon">▣</span><input id="weight" name="weight" value="২০" inputmode="decimal" /><span class="input-suffix">কেজি</span></div>
+          </div>
+          <button class="primary-button" type="submit"><span>Compare rates</span><span aria-hidden="true">↗</span></button>
+        </form>
+        <div class="search-meta"><span class="live-dot"></span>সরাসরি কুরিয়ার রেট <span class="meta-divider"></span>২ মিনিটের মধ্যে আপডেট হয়েছে</div>
+      </section>
+
+      <section class="results-section" id="shipments" aria-labelledby="results-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">আপনার সর্বশেষ তুলনা</p><h2 id="results-title">আপনার রুটের সেরা রেট</h2></div>
+          <button class="text-button" id="view-all" type="button">সব তুলনা দেখুন <span>→</span></button>
+        </div>
+        <div class="result-toolbar">
+          <div class="tabs" role="tablist" aria-label="Rate categories">
+            <button class="tab is-active" type="button" data-filter="all" role="tab" aria-selected="true">সব রেট <span>৫</span></button>
+            <button class="tab" type="button" data-filter="recommended" role="tab" aria-selected="false">সেরা পছন্দ <span>২</span></button>
+            <button class="tab" type="button" data-filter="fastest" role="tab" aria-selected="false">দ্রুততম <span>২</span></button>
+          </div>
+          <button class="sort-button" id="sort-button" type="button">সাজান: <strong>কম খরচ</strong> <span>⌄</span></button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>কুরিয়ার</th><th>সেবা</th><th>সম্ভাব্য ডেলিভারি</th><th>খরচ</th><th>নির্ভরযোগ্যতা</th><th><span class="sr-only">Save</span></th></tr></thead>
+            <tbody id="rate-rows">
+              <tr data-row-index="0" data-tags="recommended" data-price="280">
+                <td><div class="carrier-cell"><span class="carrier-logo logo-red">S</span><div><strong>সুন্দরবন</strong><small>ইকোনমি ডেলিভারি</small></div></div></td>
+                <td><span class="service-pill">পার্সেল</span></td><td><strong>১৬ আগস্ট</strong><small>২-৩ কর্মদিবস</small></td><td><strong class="price">৳২৮০</strong><small>সব খরচসহ</small></td><td><span class="confidence high"><i></i>৯৮% মিল</span></td><td><button class="save-button" type="button" aria-label="Save Sundarban rate">☆</button></td>
+              </tr>
+              <tr data-row-index="1" data-tags="recommended fastest" data-price="320">
+                <td><div class="carrier-cell"><span class="carrier-logo logo-blue">R</span><div><strong>রেডএক্স</strong><small>প্রায়োরিটি ডেলিভারি</small></div></div></td>
+                <td><span class="service-pill">পার্সেল</span></td><td><strong>১৫ আগস্ট</strong><small>১-২ কর্মদিবস</small></td><td><strong class="price">৳৩২০</strong><small>সব খরচসহ</small></td><td><span class="confidence high"><i></i>৯৫% মিল</span></td><td><button class="save-button" type="button" aria-label="Save RedX rate">☆</button></td>
+              </tr>
+              <tr data-row-index="2" data-tags="fastest" data-price="350">
+                <td><div class="carrier-cell"><span class="carrier-logo logo-yellow">P</span><div><strong>পাঠাও</strong><small>এক্সপ্রেস ডেলিভারি</small></div></div></td>
+                <td><span class="service-pill">পার্সেল</span></td><td><strong>১৫ আগস্ট</strong><small>১ কর্মদিবস</small></td><td><strong class="price">৳৩৫০</strong><small>সব খরচসহ</small></td><td><span class="confidence medium"><i></i>৮৯% মিল</span></td><td><button class="save-button" type="button" aria-label="Save Pathao rate">☆</button></td>
+              </tr>
+              <tr data-row-index="3" data-tags="all" data-price="390">
+                <td><div class="carrier-cell"><span class="carrier-logo logo-navy">C</span><div><strong>কন্টিনেন্টাল</strong><small>স্ট্যান্ডার্ড ডেলিভারি</small></div></div></td>
+                <td><span class="service-pill">পার্সেল</span></td><td><strong>১৭ আগস্ট</strong><small>৩-৪ কর্মদিবস</small></td><td><strong class="price">৳৩৯০</strong><small>সব খরচসহ</small></td><td><span class="confidence medium"><i></i>৮৭% মিল</span></td><td><button class="save-button" type="button" aria-label="Save Continental rate">☆</button></td>
+              </tr>
+              <tr data-row-index="4" data-tags="all" data-price="450">
+                <td><div class="carrier-cell"><span class="carrier-logo logo-green">E</span><div><strong>ই-কুরিয়ার</strong><small>রেগুলার ডেলিভারি</small></div></div></td>
+                <td><span class="service-pill">পার্সেল</span></td><td><strong>১৮ আগস্ট</strong><small>৪-৫ কর্মদিবস</small></td><td><strong class="price">৳৪৫০</strong><small>সব খরচসহ</small></td><td><span class="confidence low"><i></i>৮১% মিল</span></td><td><button class="save-button" type="button" aria-label="Save eCourier rate">☆</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="empty-state" id="empty-state" hidden>No rates match this view.</div>
+        </div>
+      </section>
+
+      <section class="insight-grid" id="analytics" aria-label="Shipping insights">
+        <article class="insight-card savings-card"><div class="insight-head"><span class="insight-icon coral">↘</span><span class="trend">+12.8% <small>this month</small></span></div><p>Potential savings</p><strong>$1,284.60</strong><div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+        <article class="insight-card"><div class="insight-head"><span class="insight-icon teal">◎</span><span class="trend neutral">4.8 / 5 <small>avg. rating</small></span></div><p>Carrier reliability</p><strong>94.2%</strong><div class="progress-line"><span style="width: 94.2%"></span></div><small class="insight-foot">Across 128 completed shipments</small></article>
+        <article class="insight-card route-insight"><div><p>Most active lane</p><strong>West → Midwest</strong><small>26 shipments this month</small></div><span class="route-art" aria-hidden="true">⟶</span></article>
+      </section>
+
+      <footer class="footer"><span>© 2024 LogiCompare</span><span><a href="#privacy">Privacy</a><a href="#terms">Terms</a><span class="status"><i></i>All systems operational</span></span></footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

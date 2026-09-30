@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LogiCompare Bangladesh account access" />
+  <title>LogiCompare Bangladesh | Login & Register</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <section class="auth-visual" aria-label="LogiCompare Bangladesh">
+      <a class="brand auth-brand" href="index.html"><span class="brand-mark">LC</span><span>LogiCompare</span></a>
+      <div class="auth-visual-copy">
+        <p class="eyebrow accent-eyebrow" data-i18n="visualEyebrow">বাংলাদেশের ডেলিভারি ইন্টেলিজেন্স</p>
+        <h1 data-i18n-html="visualHeadline">আপনার ডেলিভারি,<br /><em>আরও সহজ।</em></h1>
+        <p data-i18n="visualDescription">দেশের সেরা কুরিয়ার রেট, দ্রুত তুলনা এবং প্রতিটি চালানের পরিষ্কার হিসাব এক জায়গায় রাখুন।</p>
+      </div>
+      <div class="auth-route-art" aria-hidden="true"><span class="route-pin pin-dhaka" data-i18n="dhaka">ঢাকা</span><span class="route-pin pin-chattogram" data-i18n="chattogram">চট্টগ্রাম</span><span class="route-line"></span><span class="route-truck">▰</span></div>
+      <p class="auth-visual-foot" data-i18n="visualFoot">ঢাকা • চট্টগ্রাম • সিলেট • খুলনা • সারা বাংলাদেশ</p>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-panel-top"><span data-i18n="accountLabel">আপনার অ্যাকাউন্ট</span><div class="auth-top-actions"><div class="language-switch" role="group" aria-label="Language"><button class="language-button is-active" type="button" data-language="bn">বাংলা</button><button class="language-button" type="button" data-language="en">English</button></div><a href="index.html" data-i18n="dashboardLink">← Dashboard</a></div></div>
+      <div class="auth-card">
+        <div class="auth-heading"><span class="auth-kicker" data-i18n="kicker">LOGISTIC CONTROL CENTER</span><h2 id="auth-title">আবার স্বাগতম</h2><p id="auth-subtitle">আপনার রেট ও চালান দেখতে লগইন করুন।</p></div>
+        <div class="auth-tabs" role="tablist" aria-label="Account access">
+          <button class="auth-tab is-active" type="button" data-mode="login" role="tab" aria-selected="true" data-i18n="loginTab">লগইন</button>
+          <button class="auth-tab" type="button" data-mode="register" role="tab" aria-selected="false" data-i18n="registerTab">নতুন অ্যাকাউন্ট</button>
+        </div>
+        <div class="social-auth" aria-label="Social sign in">
+          <button class="social-button" type="button" data-provider="Google"><span class="provider-icon google-icon">G</span><span data-i18n="googleButton">Continue with Google</span></button>
+          <button class="social-button" type="button" data-provider="Apple"><span class="provider-icon apple-icon">●</span><span data-i18n="appleButton">Continue with Apple</span></button>
+        </div>
+        <div class="auth-divider"><span data-i18n="orContinue">অথবা ফোন দিয়ে চালিয়ে যান</span></div>
+        <form class="auth-form" id="auth-form">
+          <div class="auth-name-fields" hidden>
+            <label for="full-name" data-i18n="nameLabel">আপনার নাম</label>
+            <div class="auth-input"><span>✦</span><input id="full-name" type="text" data-placeholder-bn="যেমন: রাফি আহমেদ" data-placeholder-en="e.g. Rafi Ahmed" placeholder="যেমন: রাফি আহমেদ" /></div>
+          </div>
+          <label for="phone" data-i18n="phoneLabel">মোবাইল নম্বর</label>
+          <div class="auth-input"><span>+880</span><input id="phone" type="tel" inputmode="tel" data-placeholder-bn="01XXXXXXXXX" data-placeholder-en="01XXXXXXXXX" placeholder="01XXXXXXXXX" required /></div>
+          <label for="password" data-i18n="passwordLabel">পাসওয়ার্ড</label>
+          <div class="auth-input"><span>⌑</span><input id="password" type="password" data-placeholder-bn="আপনার পাসওয়ার্ড" data-placeholder-en="Your password" placeholder="আপনার পাসওয়ার্ড" required /><button class="password-toggle" type="button" aria-label="Show password" data-i18n="showPassword">দেখুন</button></div>
+          <div class="auth-options"><label class="check-label"><input type="checkbox" /> <span data-i18n="rememberMe">আমাকে মনে রাখুন</span></label><a href="#forgot" data-i18n="forgotPassword">পাসওয়ার্ড ভুলে গেছেন?</a></div>
+          <button class="auth-submit" type="submit"><span id="submit-label">লগইন করুন</span><span>↗</span></button>
+        </form>
+        <p class="auth-terms"><span data-i18n="termsPrefix">চালিয়ে গেলে আপনি আমাদের</span> <a href="#terms" data-i18n="termsLink">ব্যবহারের শর্ত</a> <span data-i18n="termsJoin">ও</span> <a href="#privacy" data-i18n="privacyLink">গোপনীয়তা নীতি</a><span data-i18n="termsSuffix">-তে সম্মতি দিচ্ছেন।</span></p>
+      </div>
+      <p class="auth-help"><span data-i18n="helpText">সহায়তা প্রয়োজন?</span> <a href="mailto:support@logicompare.bd">support@logicompare.bd</a></p>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="auth.js"></script>
+</body>
+</html>
