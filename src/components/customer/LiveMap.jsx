@@ -15,10 +15,13 @@ export default function LiveMap({ trackingId = 'LC-BD-2408147' }) {
     L.marker(routePoints[0]).addTo(map).bindTooltip('Dhaka hub');
     L.marker(routePoints.at(-1)).addTo(map).bindTooltip('Chattogram hub');
     parcelRef.current = L.marker(routePoints[1]).addTo(map).bindPopup(`${trackingId} · In transit`);
-    map.fitBounds(route.getBounds(), { padding: [20, 20] });
+    const fitMap = () => { map.invalidateSize(false); map.fitBounds(route.getBounds(), { padding: [24, 24], maxZoom: 8 }); };
+    fitMap();
+    window.setTimeout(fitMap, 250);
+    window.addEventListener('resize', fitMap);
     let position = 1;
     const timer = window.setInterval(() => { position = (position + 1) % (routePoints.length - 1); const from = routePoints[position]; const to = routePoints[position + 1]; parcelRef.current.setLatLng([(from[0] + to[0]) / 2, (from[1] + to[1]) / 2]); }, 8000);
-    return () => { window.clearInterval(timer); map.remove(); };
+    return () => { window.clearInterval(timer); window.removeEventListener('resize', fitMap); map.remove(); };
   }, [trackingId]);
   return <div className="live-map-panel react-live-map"><div ref={mapRef} id="react-live-map" /><div className="map-overlay"><span className="live-dot" /><strong>Live location</strong><small>Updated just now</small></div></div>;
 }

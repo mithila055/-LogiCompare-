@@ -13,13 +13,13 @@ let language = localStorage.getItem('logicompare-language') || 'bn';
 
 const dashboardCopy = {
   bn: {
-    workspace: 'ওয়ার্কস্পেস', account: 'অ্যাকাউন্ট', compare: 'রেট তুলনা', shipments: 'চালান', analytics: 'বিশ্লেষণ', carriers: 'কুরিয়ার', accountLink: 'অ্যাকাউন্ট', help: 'সহায়তা কেন্দ্র', greeting: 'শুভ সকাল, রাফি', date: 'বুধবার, ১৪ আগস্ট ২০২৪',
+    workspace: 'ওয়ার্কস্পেস', account: 'অ্যাকাউন্ট', compare: 'রেট তুলনা', booking: 'পিকআপ বুক করুন', tracking: 'চালান ট্র্যাক করুন', shipments: 'চালান', analytics: 'বিশ্লেষণ', accountLink: 'অ্যাকাউন্ট', help: 'সহায়তা কেন্দ্র', greeting: 'শুভ সকাল, রাফি', date: 'বুধবার, ১৪ আগস্ট ২০২৪',
     heroEyebrow: 'বাংলাদেশ ডেলিভারি ইন্টেলিজেন্স', heroTitle: 'আরও বুদ্ধিমান ডেলিভারি।<br /><em>খরচ কমান।</em>', heroDescription: 'ঢাকা থেকে দেশের যেকোনো প্রান্তে পাঠানোর আগে এক জায়গায় কুরিয়ার ও ট্রাকিং রেট তুলনা করুন।',
     originLabel: 'পাঠাবেন যেখান থেকে', destinationLabel: 'পাঠাবেন যেখানে', weightLabel: 'ওজন', weightUnit: 'কেজি', compareButton: 'রেট তুলনা করুন', liveMeta: 'সরাসরি কুরিয়ার রেট', updatedMeta: '২ মিনিটের মধ্যে আপডেট হয়েছে', latest: 'আপনার সর্বশেষ তুলনা', bestRates: 'আপনার রুটের সেরা রেট', viewAll: 'সব তুলনা দেখুন', allRates: 'সব রেট', recommended: 'সেরা পছন্দ', fastest: 'দ্রুততম', sortLow: 'কম খরচ', sortHigh: 'বেশি খরচ', noRates: 'এই ভিউতে কোনো রেট নেই।', save: 'রেট সংরক্ষণ করুন',
     table: ['কুরিয়ার', 'সেবা', 'সম্ভাব্য ডেলিভারি', 'খরচ', 'নির্ভরযোগ্যতা'], savings: 'সম্ভাব্য সাশ্রয়', savingsValue: '৳১,২৮৪.৬০', month: 'এই মাসে', reliability: 'কুরিয়ার নির্ভরযোগ্যতা', rating: 'গড় রেটিং', reliabilityValue: '৯৪.২%', completed: '১২৮টি সম্পন্ন চালানের ভিত্তিতে', activeLane: 'সবচেয়ে সক্রিয় রুট', shipmentsMonth: 'এই মাসে ২৬টি চালান', footerPrivacy: 'গোপনীয়তা', footerTerms: 'শর্তাবলি', system: 'সব সিস্টেম সচল'
   },
   en: {
-    workspace: 'Workspace', account: 'Account', compare: 'Compare rates', shipments: 'Shipments', analytics: 'Analytics', carriers: 'Carriers', accountLink: 'Account', help: 'Help center', greeting: 'Good morning, Rafi', date: 'Wednesday, 14 August 2024',
+    workspace: 'Workspace', account: 'Account', compare: 'Compare rates', booking: 'Book pickup', tracking: 'Track shipment', shipments: 'Shipments', analytics: 'Analytics', accountLink: 'Account', help: 'Help center', greeting: 'Good morning, Rafi', date: 'Wednesday, 14 August 2024',
     heroEyebrow: 'Bangladesh delivery intelligence', heroTitle: 'Deliver smarter.<br /><em>Spend less.</em>', heroDescription: 'Compare courier and freight rates before sending from Dhaka to anywhere in Bangladesh.',
     originLabel: 'Ship from', destinationLabel: 'Ship to', weightLabel: 'Weight', weightUnit: 'kg', compareButton: 'Compare rates', liveMeta: 'Live courier pricing', updatedMeta: 'Updated less than 2 min ago', latest: 'Your latest comparison', bestRates: 'Best rates for your route', viewAll: 'View all comparisons', allRates: 'All rates', recommended: 'Recommended', fastest: 'Fastest', sortLow: 'Lowest price', sortHigh: 'Highest price', noRates: 'No rates match this view.', save: 'Save rate',
     table: ['Carrier', 'Service', 'Est. delivery', 'Price', 'Confidence'], savings: 'Potential savings', savingsValue: 'BDT 1,284.60', month: 'this month', reliability: 'Carrier reliability', rating: 'avg. rating', reliabilityValue: '94.2%', completed: 'Across 128 completed shipments', activeLane: 'Most active lane', shipmentsMonth: '26 shipments this month', footerPrivacy: 'Privacy', footerTerms: 'Terms', system: 'All systems operational'
@@ -53,9 +53,10 @@ function setDashboardLanguage(nextLanguage) {
   document.querySelectorAll('.nav-label')[0].textContent = copy.workspace;
   document.querySelectorAll('.nav-label')[1].textContent = copy.account;
   const navItems = document.querySelectorAll('.nav-group:first-of-type .nav-item');
-  [copy.compare, copy.shipments, copy.analytics, copy.carriers].forEach((label, index) => textNode(navItems[index], label));
+  [copy.compare, copy.booking, copy.tracking, copy.shipments, copy.analytics].forEach((label, index) => textNode(navItems[index], label));
   textNode(document.querySelector('.nav-group-bottom .nav-item'), copy.accountLink);
-  textNode(document.querySelector('.nav-group-bottom .nav-item:last-child'), copy.help);
+  textNode(document.querySelector('.nav-group-bottom a[href^="mailto"]'), copy.help);
+  textNode(document.querySelector('#logout-button'), language === 'bn' ? 'লগআউট' : 'Log out');
   textNode(document.querySelector('.sidebar-footer strong'), language === 'bn' ? 'রাফি আহমেদ' : 'Rafi Ahmed');
   textNode(document.querySelector('.sidebar-footer span'), language === 'bn' ? 'অপারেশনস লিড' : 'Operations lead');
   textNode(document.querySelector('.topbar .eyebrow'), copy.date);
@@ -161,8 +162,9 @@ form.addEventListener('submit', (event) => {
   document.querySelector('#results-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
-document.querySelector('#view-all').addEventListener('click', () => { window.location.href = 'react.html#/compare'; });
+document.querySelector('#view-all').addEventListener('click', () => { window.location.href = window.location.protocol === 'file:' ? 'index.html#compare' : 'react.html#/compare'; });
 document.querySelector('.notification-button').addEventListener('click', () => showToast(language === 'bn' ? 'নতুন কোনো alert নেই। আপনার চালান ঠিক আছে।' : 'No new alerts. Your shipments are on track.'));
+document.querySelector('#logout-button').addEventListener('click', () => { localStorage.removeItem('logicompare-user'); localStorage.removeItem('logicompare-session'); window.location.href = 'auth.html#login'; });
 document.querySelectorAll('.language-button').forEach((button) => button.addEventListener('click', () => setDashboardLanguage(button.dataset.language)));
 setDashboardLanguage(language);
 renderRates();

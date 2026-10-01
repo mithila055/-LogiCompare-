@@ -22,5 +22,10 @@ The planned application entry is `react.html`, with the requested structure unde
 - Shared buttons, inputs, modal, loader, cards, and data grid
 - Auth context, private routes, hooks, API service boundaries, and formatting utilities
 - `VITE_API_BASE_URL` in `.env` for the backend API
+- `VITE_GOOGLE_MAPS_API_KEY` in `.env` for the React map; the static preview reads a browser-restricted key from `google-maps-config.js`
 
 The current environment does not have Node.js installed, so dependency installation and Vite build verification must be run on a Node-enabled machine.
+
+## Google Maps setup
+
+Enable **Maps JavaScript API** in Google Cloud, restrict the key to your app domains, then add it to `.env` as `VITE_GOOGLE_MAPS_API_KEY`. For the direct static preview, set the same browser-restricted key in `google-maps-config.js`. Without a key, the map safely falls back to OpenStreetMap/Leaflet.

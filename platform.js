@@ -2,6 +2,9 @@ const platformToast = document.querySelector('#toast');
 const bookingForm = document.querySelector('#booking-form');
 const trackingForm = document.querySelector('#tracking-form');
 const platformState = JSON.parse(localStorage.getItem('logicompare-platform') || '{}');
+const shipmentKey = 'logicompare-shipments';
+const defaultShipments = [{ trackingId: 'LC-BD-2408147', route: 'Dhaka → Chattogram', parcelType: 'Parcel', weight: 2, status: 'in_transit', payment: 'Paid' }, { trackingId: 'LC-BD-2408062', route: 'Dhaka → Sylhet', parcelType: 'Document', weight: 1, status: 'delivered', payment: 'Paid' }];
+const shipments = JSON.parse(localStorage.getItem(shipmentKey) || JSON.stringify(defaultShipments));
 let liveMap;
 let parcelMarker;
 let parcelPosition = 0;
@@ -26,7 +29,7 @@ function markerIcon(className, content) {
   return L.divIcon({ className: '', html: `<span class="${className}">${content}</span>`, iconSize: className === 'parcel-marker' ? [30, 30] : [20, 20], iconAnchor: className === 'parcel-marker' ? [4, 27] : [10, 10] });
 }
 
-function initializeLiveMap() {
+function initializeLeafletMap() {
   if (!window.L || !document.querySelector('#live-map')) return;
   liveMap = L.map('live-map', { zoomControl: false }).setView([23.15, 91.02], 8);
   L.control.zoom({ position: 'bottomright' }).addTo(liveMap);
@@ -35,7 +38,10 @@ function initializeLiveMap() {
   L.marker(routePoints[0], { icon: markerIcon('hub-marker', '') }).addTo(liveMap).bindTooltip('Dhaka hub');
   L.marker(routePoints.at(-1), { icon: markerIcon('hub-marker', '') }).addTo(liveMap).bindTooltip('Chattogram hub');
   parcelMarker = L.marker(routePoints[1], { icon: markerIcon('parcel-marker', '<span>▰</span>') }).addTo(liveMap).bindPopup('LC-BD-2408147 · In transit');
-  liveMap.fitBounds(route.getBounds(), { padding: [20, 20] });
+  const fitLiveMap = () => { liveMap.invalidateSize(false); liveMap.fitBounds(route.getBounds(), { padding: [24, 24], maxZoom: 8 }); };
+  fitLiveMap();
+  window.setTimeout(fitLiveMap, 250);
+  window.addEventListener('resize', fitLiveMap);
   document.querySelector('#map-center').addEventListener('click', () => liveMap.setView(parcelMarker.getLatLng(), 10, { animate: true }));
   window.setInterval(() => {
     parcelPosition = (parcelPosition + 1) % (routePoints.length - 1);
@@ -44,6 +50,39 @@ function initializeLiveMap() {
     parcelMarker.setLatLng([(from[0] + to[0]) / 2, (from[1] + to[1]) / 2]);
     document.querySelector('#map-updated').textContent = language === 'bn' ? 'এইমাত্র আপডেট হয়েছে' : 'Updated just now';
   }, 8000);
+}
+
+function initializeGoogleMap() {
+  if (!document.querySelector('#live-map')) return;
+  const map = new google.maps.Map(document.querySelector('#live-map'), { center: { lat: 23.15, lng: 91.02 }, zoom: 8, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, gestureHandling: 'greedy' });
+  const path = routePoints.map(([lat, lng]) => ({ lat, lng }));
+  new google.maps.Polyline({ path, geodesic: true, strokeColor: '#f06e55', strokeOpacity: .85, strokeWeight: 4, map });
+  new google.maps.Marker({ position: path[0], map, title: 'Dhaka hub' });
+  new google.maps.Marker({ position: path.at(-1), map, title: 'Chattogram hub' });
+  const googleMarker = new google.maps.Marker({ position: path[1], map, title: 'LC-BD-2408147 · In transit', animation: google.maps.Animation.DROP });
+  const bounds = new google.maps.LatLngBounds();
+  path.forEach((point) => bounds.extend(point));
+  map.fitBounds(bounds, 24);
+  document.querySelector('#map-center').addEventListener('click', () => { map.panTo(googleMarker.getPosition()); map.setZoom(10); });
+  window.setInterval(() => {
+    parcelPosition = (parcelPosition + 1) % (path.length - 1);
+    const from = path[parcelPosition];
+    const to = path[parcelPosition + 1];
+    googleMarker.setPosition({ lat: (from.lat + to.lat) / 2, lng: (from.lng + to.lng) / 2 });
+    document.querySelector('#map-updated').textContent = language === 'bn' ? 'এইমাত্র আপডেট হয়েছে' : 'Updated just now';
+  }, 8000);
+}
+
+function initializeMaps() {
+  const key = window.LOGICOMAP_GOOGLE_MAPS_API_KEY;
+  if (!key) { initializeLeafletMap(); return; }
+  window.__logicompareGoogleReady = initializeGoogleMap;
+  const script = document.createElement('script');
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=__logicompareGoogleReady&v=weekly`;
+  script.async = true;
+  script.defer = true;
+  script.onerror = () => initializeLeafletMap();
+  document.head.appendChild(script);
 }
 
 function setPlatformLanguage(language) {
@@ -59,7 +98,7 @@ function setPlatformLanguage(language) {
   set('.history-panel .eyebrow', copy.historyEyebrow); set('.history-panel h2', copy.historyTitle); set('#export-history', `${copy.export} ↓`); set('.notification-panel .eyebrow', copy.notificationEyebrow); set('.notification-panel h2', copy.notificationTitle);
   set('#pay-button', language === 'bn' ? 'পেমেন্ট নিশ্চিত করুন →' : 'Confirm payment →'); set('.review-panel .eyebrow', language === 'bn' ? 'কুরিয়ার রিভিউ' : 'Courier review'); set('.review-panel h2', language === 'bn' ? 'ডেলিভারি রেট দিন' : 'Rate a delivered shipment'); setLabels('.review-form label', language === 'bn' ? ['চালান', 'আপনার মতামত'] : ['Shipment', 'Your feedback']); set('.review-form textarea', '');
   set('.role-heading .eyebrow', copy.operationsEyebrow); set('.role-heading h2', copy.operationsTitle); set('.role-heading > div:first-child p:last-child', copy.operationsDescription); setMany('.role-tab', [copy.customer, copy.courier, copy.admin]);
-  setMany('[data-role-view="customer"] .role-stat span', [copy.activeBookings, copy.wallet, copy.addresses]); set('[data-action="profile"]', `${copy.profile} →`); setMany('[data-role-view="courier"] .role-stat span', [copy.newRequests, copy.pickups, copy.onTime]); set('[data-action="accept"]', `${copy.queue} →`); setMany('[data-role-view="admin"] .role-stat span', [copy.total, copy.partners, copy.disputes]); set('[data-action="reports"]', `${copy.reports} →`);
+  setMany('[data-role-view="customer"] .role-stat span', [copy.activeBookings, copy.wallet, copy.addresses]); setMany('[data-role-view="customer"] .role-stat small', language === 'bn' ? ['পিকআপ নিশ্চিত', 'উপলব্ধ ক্রেডিট', 'বাড়ি, অফিস, গুদাম'] : ['Pickup confirmed', 'Available credit', 'Home, office, warehouse']); document.querySelectorAll('[data-role-view="customer"] .role-stat strong')[1].textContent = language === 'bn' ? '৳২,৮৪০' : 'BDT 2,840'; set('[data-action="profile"]', `${copy.profile} →`); setMany('[data-role-view="courier"] .role-stat span', [copy.newRequests, copy.pickups, copy.onTime]); setMany('[data-role-view="courier"] .role-stat small', language === 'bn' ? ['৪টি এলাকায়', '৭টি গ্রহণের অপেক্ষায়', 'শেষ ৩০ দিন'] : ['Across 4 service areas', '7 awaiting acceptance', 'Last 30 days']); set('[data-action="accept"]', `${copy.queue} →`); setMany('[data-role-view="admin"] .role-stat span', [copy.total, copy.partners, copy.disputes]); setMany('[data-role-view="admin"] .role-stat small', language === 'bn' ? ['এই মাসে +১৮.২%', '২টি যাচাইয়ের অপেক্ষায়', 'মনোযোগ প্রয়োজন'] : ['+18.2% this month', '2 pending review', 'Needs attention']); set('[data-action="reports"]', `${copy.reports} →`);
   set('#map-live-label', language === 'bn' ? 'সরাসরি লোকেশন' : 'Live location'); set('#map-updated', language === 'bn' ? 'এইমাত্র আপডেট হয়েছে' : 'Updated just now');
 }
 
@@ -82,7 +121,9 @@ bookingForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const trackingId = `LC-BD-${Date.now().toString().slice(-7)}`;
   const paymentMethod = platformState.paymentMethod || 'bKash';
-  const shipment = { trackingId, parcelType: document.querySelector('#parcel-type').value, paymentMethod, status: 'pickup_requested' };
+  const shipment = { trackingId, route: document.querySelector('#booking-route').textContent, parcelType: document.querySelector('#parcel-type').value, paymentMethod, status: 'pickup_requested', payment: 'Pending', createdAt: new Date().toISOString() };
+  shipments.unshift(shipment);
+  localStorage.setItem(shipmentKey, JSON.stringify(shipments));
   platformState.lastShipment = shipment;
   localStorage.setItem('logicompare-platform', JSON.stringify(platformState));
   document.querySelector('#tracking-id').value = trackingId;
@@ -98,9 +139,14 @@ trackingForm.addEventListener('submit', (event) => {
     platformMessage('Enter a valid tracking ID, for example LC-BD-2408147');
     return;
   }
-  document.querySelector('#tracking-status').textContent = trackingId === 'LC-BD-2408147' ? 'In transit' : 'Pickup requested';
-  document.querySelector('#tracking-route').textContent = trackingId === 'LC-BD-2408147' ? 'Dhaka hub → Chattogram hub' : 'Awaiting courier pickup confirmation';
-  document.querySelector('#tracking-eta').textContent = trackingId === 'LC-BD-2408147' ? '15 Aug' : 'To be confirmed';
+  const shipment = shipments.find((item) => item.trackingId === trackingId) || (trackingId === 'LC-BD-2408147' ? { status: 'in_transit', route: 'Dhaka hub → Chattogram hub' } : null);
+  if (!shipment) {
+    platformMessage(language === 'bn' ? 'এই tracking ID-তে কোনো চালান পাওয়া যায়নি' : 'No shipment found for this tracking ID');
+    return;
+  }
+  document.querySelector('#tracking-status').textContent = shipment.status.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+  document.querySelector('#tracking-route').textContent = shipment.route || 'Awaiting courier pickup confirmation';
+  document.querySelector('#tracking-eta').textContent = shipment.status === 'delivered' ? 'Delivered' : 'To be confirmed';
   platformMessage(`Tracking updated for ${trackingId}`);
 });
 
@@ -111,8 +157,8 @@ document.querySelectorAll('.role-tab').forEach((tab) => tab.addEventListener('cl
 }));
 
 document.querySelectorAll('[data-action]').forEach((button) => button.addEventListener('click', () => {
-  const messages = { profile: 'Profile editor is ready for your saved addresses.', accept: 'Pickup queue loaded: 7 requests need acceptance.', reports: 'Admin reports are ready to review.' };
-  platformMessage(messages[button.dataset.action]);
+  const actions = { profile: () => { window.location.href = 'auth.html#register'; }, accept: () => { document.querySelector('#booking').scrollIntoView({ behavior: 'smooth', block: 'center' }); platformMessage('Pickup queue is ready for the next booking.'); }, reports: () => { document.querySelector('#shipments').scrollIntoView({ behavior: 'smooth', block: 'center' }); platformMessage('Shipment reports opened.'); } };
+  actions[button.dataset.action]?.();
 }));
 
 document.querySelector('#export-history').addEventListener('click', () => {
@@ -132,7 +178,15 @@ document.querySelectorAll('.notification-list button').forEach((button) => butto
 }));
 
 document.querySelector('#pay-button').addEventListener('click', () => {
+  if (!platformState.lastShipment) {
+    platformMessage(language === 'bn' ? 'পেমেন্টের আগে একটি booking তৈরি করুন' : 'Create a booking before confirming payment');
+    document.querySelector('#booking').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
   platformState.paymentStatus = 'paid';
+  const savedShipment = shipments.find((shipment) => shipment.trackingId === platformState.lastShipment.trackingId);
+  if (savedShipment) savedShipment.payment = 'Paid';
+  localStorage.setItem(shipmentKey, JSON.stringify(shipments));
   localStorage.setItem('logicompare-platform', JSON.stringify(platformState));
   platformMessage(language === 'bn' ? 'পেমেন্ট সফল হয়েছে' : 'Payment confirmed successfully');
 });
@@ -149,10 +203,17 @@ document.querySelector('#review-form').addEventListener('submit', (event) => {
     platformMessage(language === 'bn' ? 'রেটিং নির্বাচন করুন' : 'Select a rating first');
     return;
   }
+  const review = { shipment: event.currentTarget.querySelector('select').value, rating: selectedRating, message: event.currentTarget.querySelector('textarea').value.trim(), createdAt: new Date().toISOString() };
+  const reviews = JSON.parse(localStorage.getItem('logicompare-reviews') || '[]');
+  localStorage.setItem('logicompare-reviews', JSON.stringify([review, ...reviews]));
   platformMessage(language === 'bn' ? 'আপনার রিভিউ জমা হয়েছে' : 'Your review has been submitted');
+});
+
+document.querySelector('.sidebar-footer .icon-button')?.addEventListener('click', () => {
+  platformMessage(language === 'bn' ? 'প্রোফাইল সেটিংস খুলতে Account নির্বাচন করুন' : 'Choose Account to open profile settings');
 });
 
 setMinimumPickupDate();
 setPlatformLanguage(localStorage.getItem('logicompare-language') || 'bn');
 document.querySelectorAll('.language-button').forEach((button) => button.addEventListener('click', () => setPlatformLanguage(button.dataset.language)));
-initializeLiveMap();
+initializeMaps();

@@ -31,20 +31,17 @@
           <button class="auth-tab is-active" type="button" data-mode="login" role="tab" aria-selected="true" data-i18n="loginTab">লগইন</button>
           <button class="auth-tab" type="button" data-mode="register" role="tab" aria-selected="false" data-i18n="registerTab">নতুন অ্যাকাউন্ট</button>
         </div>
-        <div class="social-auth" aria-label="Social sign in">
-          <button class="social-button" type="button" data-provider="Google"><span class="provider-icon google-icon">G</span><span data-i18n="googleButton">Continue with Google</span></button>
-          <button class="social-button" type="button" data-provider="Apple"><span class="provider-icon apple-icon">●</span><span data-i18n="appleButton">Continue with Apple</span></button>
-        </div>
-        <div class="auth-divider"><span data-i18n="orContinue">অথবা ফোন দিয়ে চালিয়ে যান</span></div>
+        <div class="auth-method-tabs" role="tablist" aria-label="Sign in method"><button class="auth-method is-active" type="button" data-method="phone" data-i18n="phoneMethod">ফোন নম্বর</button><button class="auth-method" type="button" data-method="email" data-i18n="emailMethod">ইমেইল</button></div>
         <form class="auth-form" id="auth-form">
           <div class="auth-name-fields" hidden>
             <label for="full-name" data-i18n="nameLabel">আপনার নাম</label>
             <div class="auth-input"><span>✦</span><input id="full-name" type="text" data-placeholder-bn="যেমন: রাফি আহমেদ" data-placeholder-en="e.g. Rafi Ahmed" placeholder="যেমন: রাফি আহমেদ" /></div>
           </div>
-          <label for="phone" data-i18n="phoneLabel">মোবাইল নম্বর</label>
-          <div class="auth-input"><span>+880</span><input id="phone" type="tel" inputmode="tel" data-placeholder-bn="01XXXXXXXXX" data-placeholder-en="01XXXXXXXXX" placeholder="01XXXXXXXXX" required /></div>
+          <div class="phone-fields"><label for="phone" data-i18n="phoneLabel">মোবাইল নম্বর</label><div class="auth-input"><span>+880</span><input id="phone" type="tel" inputmode="tel" data-placeholder-bn="01XXXXXXXXX" data-placeholder-en="01XXXXXXXXX" placeholder="01XXXXXXXXX" /></div></div>
+          <div class="email-fields" hidden><label for="email" data-i18n="emailLabel">ইমেইল</label><div class="auth-input"><span>@</span><input id="email" type="email" data-placeholder-bn="name@example.com" data-placeholder-en="name@example.com" placeholder="name@example.com" /></div></div>
           <label for="password" data-i18n="passwordLabel">পাসওয়ার্ড</label>
-          <div class="auth-input"><span>⌑</span><input id="password" type="password" minlength="6" data-placeholder-bn="আপনার পাসওয়ার্ড" data-placeholder-en="Your password" placeholder="আপনার পাসওয়ার্ড" required /><button class="password-toggle" type="button" aria-label="Show password" data-i18n="showPassword">দেখুন</button></div>
+          <div class="auth-input"><span>⌑</span><input id="password" type="password" minlength="8" data-placeholder-bn="আপনার পাসওয়ার্ড" data-placeholder-en="Your password" placeholder="আপনার পাসওয়ার্ড" required /><button class="password-toggle" type="button" aria-label="Show password" data-i18n="showPassword">দেখুন</button></div>
+          <div class="auth-confirm-fields" hidden><label for="confirm-password" data-i18n="confirmPasswordLabel">পাসওয়ার্ড নিশ্চিত করুন</label><div class="auth-input"><span>⌑</span><input id="confirm-password" type="password" minlength="8" data-placeholder-bn="আবার পাসওয়ার্ড লিখুন" data-placeholder-en="Repeat your password" placeholder="আবার পাসওয়ার্ড লিখুন" /></div></div>
           <div class="auth-options"><label class="check-label"><input type="checkbox" /> <span data-i18n="rememberMe">আমাকে মনে রাখুন</span></label><a href="#forgot" data-i18n="forgotPassword">পাসওয়ার্ড ভুলে গেছেন?</a></div>
           <button class="auth-submit" type="submit"><span id="submit-label">লগইন করুন</span><span>↗</span></button>
         </form>
@@ -54,6 +51,6 @@
     </section>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="auth.js"></script>
+  <script src="auth.js?v=3"></script>
 </body>
 </html>
