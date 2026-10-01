@@ -15,13 +15,13 @@ localStorage.setItem('logicompare-accounts', JSON.stringify(accounts));
 
 const translations = {
   bn: {
-    visualEyebrow: 'বাংলাদেশের ডেলিভারি ইন্টেলিজেন্স', visualHeadline: 'আপনার ডেলিভারি,<br /><em>আরও সহজ।</em>', visualDescription: 'দেশের সেরা কুরিয়ার রেট, দ্রুত তুলনা এবং প্রতিটি চালানের পরিষ্কার হিসাব এক জায়গায় রাখুন।', visualFoot: 'ঢাকা • চট্টগ্রাম • সিলেট • খুলনা • সারা বাংলাদেশ', dhaka: 'ঢাকা', chattogram: 'চট্টগ্রাম', kicker: 'লজিস্টিক কন্ট্রোল সেন্টার',
+    visualEyebrow: 'বাংলাদেশের ডেলিভারি ইন্টেলিজেন্স', visualHeadline: 'আপনার ডেলিভারি,<br /><em>আরও সহজ।</em>', visualDescription: 'দেশের সেরা কুরিয়ার রেট, দ্রুত তুলনা এবং প্রতিটি চালানের পরিষ্কার হিসাব এক জায়গায় রাখুন।', visualFoot: 'টেকনাফ • তেঁতুলিয়া • সিলেট • খুলনা • সারা বাংলাদেশ', teknaf: 'টেকনাফ', tetulia: 'তেঁতুলিয়া', kicker: 'লজিস্টিক কন্ট্রোল সেন্টার',
     accountLabel: 'আপনার অ্যাকাউন্ট', dashboardLink: '← ড্যাশবোর্ড', loginTab: 'লগইন', registerTab: 'নতুন অ্যাকাউন্ট',
     phoneMethod: 'ফোন নম্বর', emailMethod: 'ইমেইল', nameLabel: 'আপনার নাম', phoneLabel: 'মোবাইল নম্বর', emailLabel: 'ইমেইল', passwordLabel: 'পাসওয়ার্ড', confirmPasswordLabel: 'পাসওয়ার্ড নিশ্চিত করুন', showPassword: 'দেখুন',
     rememberMe: 'আমাকে মনে রাখুন', forgotPassword: 'পাসওয়ার্ড ভুলে গেছেন?', termsPrefix: 'চালিয়ে গেলে আপনি আমাদের', termsLink: 'ব্যবহারের শর্ত', termsJoin: 'ও', privacyLink: 'গোপনীয়তা নীতি', termsSuffix: '-তে সম্মতি দিচ্ছেন।', helpText: 'সহায়তা প্রয়োজন?'
   },
   en: {
-    visualEyebrow: 'BANGLADESH DELIVERY INTELLIGENCE', visualHeadline: 'Your delivery,<br /><em>made simple.</em>', visualDescription: 'Compare trusted courier rates, track every shipment, and keep your delivery operations clear in one place.', visualFoot: 'Dhaka • Chattogram • Sylhet • Khulna • All Bangladesh', dhaka: 'Dhaka', chattogram: 'Chattogram', kicker: 'LOGISTIC CONTROL CENTER',
+    visualEyebrow: 'BANGLADESH DELIVERY INTELLIGENCE', visualHeadline: 'Your delivery,<br /><em>made simple.</em>', visualDescription: 'Compare trusted courier rates, track every shipment, and keep your delivery operations clear in one place.', visualFoot: 'Teknaf • Tetulia • Sylhet • Khulna • All Bangladesh', teknaf: 'Teknaf', tetulia: 'Tetulia', kicker: 'LOGISTIC CONTROL CENTER',
     accountLabel: 'Your account', dashboardLink: '← Dashboard', loginTab: 'Sign in', registerTab: 'Create account',
     phoneMethod: 'Phone number', emailMethod: 'Email', nameLabel: 'Your name', phoneLabel: 'Phone number', emailLabel: 'Email', passwordLabel: 'Password', confirmPasswordLabel: 'Confirm password', showPassword: 'Show',
     rememberMe: 'Remember me', forgotPassword: 'Forgot password?', termsPrefix: 'By continuing, you agree to our', termsLink: 'Terms of use', termsJoin: 'and', privacyLink: 'Privacy policy', termsSuffix: '.', helpText: 'Need help?'
