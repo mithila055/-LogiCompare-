@@ -25,6 +25,11 @@ function banglaDigits(value) {
   return String(value).replace(/\d/g, (digit) => '০১২৩৪৫৬৭৮৯'[digit]);
 }
 
+function formatHistoryPrice(value) {
+  const formattedValue = Number(value).toLocaleString('en-BD');
+  return language === 'bn' ? `৳${banglaDigits(formattedValue)}` : `BDT ${formattedValue}`;
+}
+
 function markerIcon(className, content) {
   return L.divIcon({ className: '', html: `<span class="${className}">${content}</span>`, iconSize: className === 'parcel-marker' ? [30, 30] : [20, 20], iconAnchor: className === 'parcel-marker' ? [4, 27] : [10, 10] });
 }
@@ -96,6 +101,7 @@ function setPlatformLanguage(language) {
   setMany('.payment-option small', [copy.mobile, copy.mobile, copy.card, copy.cash]);
   set('.tracking-heading .eyebrow', copy.trackingEyebrow); set('.tracking-heading h2', copy.trackingTitle); set('.tracking-heading button', `${copy.track} →`); set('.tracking-current small', copy.current); set('#tracking-status', copy.inTransit); set('#tracking-route', copy.route); const etaLabel = document.querySelector('.tracking-eta'); const etaText = [...etaLabel.childNodes].find((child) => child.nodeType === Node.TEXT_NODE); if (etaText) etaText.textContent = `${copy.eta} `;
   set('.history-panel .eyebrow', copy.historyEyebrow); set('.history-panel h2', copy.historyTitle); set('#export-history', `${copy.export} ↓`); set('.notification-panel .eyebrow', copy.notificationEyebrow); set('.notification-panel h2', copy.notificationTitle);
+  document.querySelectorAll('#history-list [data-price]').forEach((element) => { element.textContent = formatHistoryPrice(element.dataset.price); });
   set('#pay-button', language === 'bn' ? 'পেমেন্ট নিশ্চিত করুন →' : 'Confirm payment →'); set('.review-panel .eyebrow', language === 'bn' ? 'কুরিয়ার রিভিউ' : 'Courier review'); set('.review-panel h2', language === 'bn' ? 'ডেলিভারি রেট দিন' : 'Rate a delivered shipment'); setLabels('.review-form label', language === 'bn' ? ['চালান', 'আপনার মতামত'] : ['Shipment', 'Your feedback']); set('.review-form textarea', '');
   set('.role-heading .eyebrow', copy.operationsEyebrow); set('.role-heading h2', copy.operationsTitle); set('.role-heading > div:first-child p:last-child', copy.operationsDescription); setMany('.role-tab', [copy.customer, copy.courier, copy.admin]);
   setMany('[data-role-view="customer"] .role-stat span', [copy.activeBookings, copy.wallet, copy.addresses]); setMany('[data-role-view="customer"] .role-stat small', language === 'bn' ? ['পিকআপ নিশ্চিত', 'উপলব্ধ ক্রেডিট', 'বাড়ি, অফিস, গুদাম'] : ['Pickup confirmed', 'Available credit', 'Home, office, warehouse']); document.querySelectorAll('[data-role-view="customer"] .role-stat strong')[1].textContent = language === 'bn' ? '৳২,৮৪০' : 'BDT 2,840'; set('[data-action="profile"]', `${copy.profile} →`); setMany('[data-role-view="courier"] .role-stat span', [copy.newRequests, copy.pickups, copy.onTime]); setMany('[data-role-view="courier"] .role-stat small', language === 'bn' ? ['৪টি এলাকায়', '৭টি গ্রহণের অপেক্ষায়', 'শেষ ৩০ দিন'] : ['Across 4 service areas', '7 awaiting acceptance', 'Last 30 days']); set('[data-action="accept"]', `${copy.queue} →`); setMany('[data-role-view="admin"] .role-stat span', [copy.total, copy.partners, copy.disputes]); setMany('[data-role-view="admin"] .role-stat small', language === 'bn' ? ['এই মাসে +১৮.২%', '২টি যাচাইয়ের অপেক্ষায়', 'মনোযোগ প্রয়োজন'] : ['+18.2% this month', '2 pending review', 'Needs attention']); set('[data-action="reports"]', `${copy.reports} →`);
@@ -127,7 +133,7 @@ bookingForm.addEventListener('submit', (event) => {
   platformState.lastShipment = shipment;
   localStorage.setItem('logicompare-platform', JSON.stringify(platformState));
   document.querySelector('#tracking-id').value = trackingId;
-  document.querySelector('#history-list').insertAdjacentHTML('afterbegin', `<div class="history-item"><span class="history-code">LC</span><div><strong>${trackingId}</strong><small>Dhaka → Chattogram · ${shipment.parcelType}</small></div><span class="history-status status-transit">Pickup requested</span><b>৳৩২০</b></div>`);
+  document.querySelector('#history-list').insertAdjacentHTML('afterbegin', `<div class="history-item"><span class="history-code">LC</span><div><strong>${trackingId}</strong><small>Dhaka → Chattogram · ${shipment.parcelType}</small></div><span class="history-status status-transit">Pickup requested</span><b data-price="320">${formatHistoryPrice(320)}</b></div>`);
   platformMessage(`Booking created. ${trackingId} is ready for pickup.`);
   document.querySelector('#tracking').scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
